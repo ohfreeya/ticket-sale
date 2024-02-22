@@ -7,6 +7,6 @@ import (
 )
 
 func Route(route *gin.Engine) {
-	route.POST("/login", func(ctx *gin.Context) {})
+	route.POST("/login", controller.Login)
 	route.POST("/register", controller.Register)
 }

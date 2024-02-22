@@ -2,11 +2,53 @@ package controller
 
 import (
 	"net/http"
+	"strings"
 	"ticketsale/model"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
+
+func Login(ctx *gin.Context) {
+	var loginForm struct {
+		Account  string `json:"account"`
+		Password string `json:"password"`
+	}
+	var userM model.User
+	// Bind the form to the struct
+	if err := ctx.ShouldBindJSON(&loginForm); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"msg":   "Invalid form",
+			"error": err.Error(),
+		})
+		return
+	}
+	// Check account is email or account
+	isEmail := strings.Contains(loginForm.Account, "@")
+	// Check if the account exists. if not, return 404. if yes, check the password.
+	checkCond := map[string]interface{}{}
+	if isEmail {
+		checkCond["email"] = loginForm.Account
+	} else {
+		checkCond["account"] = loginForm.Account
+	}
+	user, err := userM.Find(checkCond)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"msg": "User not found",
+		})
+		return
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginForm.Password)); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"msg": "Wrong password",
+		})
+		return
+	}
+	// Generate the JWT token
+	
+
+}
 
 func Register(ctx *gin.Context) {
 	var registerForm struct {
@@ -43,7 +85,7 @@ func Register(ctx *gin.Context) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(registerForm.Password), bcrypt.DefaultCost)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "Failed to hash the password", 
+			"msg":   "Failed to hash the password",
 			"error": err.Error(),
 		})
 	}
