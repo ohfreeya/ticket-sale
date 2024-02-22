@@ -1,16 +1,11 @@
 package config
 
 import (
-	"ticketsale/model"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
-var models = []interface{}{
-	model.User{},
-}
 
 func DBInit() error {
 	dbConfig := DBConfig()
@@ -23,8 +18,4 @@ func DBInit() error {
 		panic("failed to connect database")
 	}
 	return nil
-}
-
-func DBMigrate() {
-	DB.AutoMigrate(models...)
 }
