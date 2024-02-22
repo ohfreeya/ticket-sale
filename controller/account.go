@@ -46,7 +46,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// Generate the JWT token
-	
+
 
 }
 
@@ -63,13 +63,13 @@ func Register(ctx *gin.Context) {
 	var userM model.User
 	// Bind the form to the struct
 	if err := ctx.ShouldBindJSON(&registerForm); err != nil {
-		ctx.JSON(400, gin.H{"msg": "Invalid form", "error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid form", "error": err.Error()})
 		return
 	}
 	// Check if the email is already registered
 	userM.Email = registerForm.Email
 	if userM.CheckEmailExist() {
-		ctx.JSON(400, gin.H{"msg": "Email already registered"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Email already registered"})
 		return
 	}
 
