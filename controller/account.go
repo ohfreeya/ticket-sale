@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"strings"
+	"ticketsale/auth"
 	"ticketsale/model"
 
 	"github.com/gin-gonic/gin"
@@ -46,7 +47,19 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// Generate the JWT token
-
+	tokenStr, err := auth.GenerateToken(user.Account, int(user.ID))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":   "Failed to generate the token",
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":   "Login success",
+		"token": tokenStr,
+		"uid":  user.ID,
+	})
 
 }
 
