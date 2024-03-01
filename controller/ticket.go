@@ -53,13 +53,13 @@ func CreateTicket(ctx *gin.Context) {
 func UpdateTicket(ctx *gin.Context) {
 	id := ctx.Param("id")
 	type form struct {
-		Count int `json:"count"`
+		Count     int    `json:"count"`
 		Introduce string `json:"introduce"`
 		ExpiresAt string `json:"expires_at"`
 	}
 	var req form
 	var model model.Tickets
-	_, err :=  model.Find(map[string]interface{}{"id": id})
+	_, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Ticket not found",
@@ -102,5 +102,25 @@ func UpdateTicket(ctx *gin.Context) {
 }
 
 func DeleteTicket(ctx *gin.Context) {
-
+	id := ctx.Param("id")
+	var model model.Tickets
+	_, err := model.Find(map[string]interface{}{"id": id})
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"msg":   "Ticket not found",
+			"error": err.Error(),
+		})
+		return
+	}
+	err = model.Delete()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":   "Delete ticket failed",
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg": "Delete ticket success",
+	})
 }
