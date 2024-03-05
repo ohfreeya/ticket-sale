@@ -61,6 +61,17 @@ func (t *Tickets) Delete() error {
 }
 
 // tickets type's method
+func (t *TicketsType) Find(params map[string]interface{}) (ret TicketsType, err error) {
+	result := config.DB.Where(params).First(&ret)
+	if result.RowsAffected == 0 {
+		err = result.Error
+	}
+	if result.Error != nil {
+		err = result.Error
+	}
+	return
+}
+
 func (t *TicketsType) Create() error {
 	err := config.DB.Create(t)
 	return err.Error
@@ -77,6 +88,16 @@ func (t *TicketsType) Delete() error {
 }
 
 // tickets sale price's method
+func (t *TicketsSalePrice) Find(params map[string]interface{}) (ret TicketsSalePrice, err error) {
+	result := config.DB.Where(params).First(&ret)
+	if result.RowsAffected == 0 {
+		err = result.Error
+	}
+	if result.Error != nil {
+		err = result.Error
+	}
+	return
+}
 func (t *TicketsSalePrice) Create() error {
 	err := config.DB.Create(t)
 	return err.Error
