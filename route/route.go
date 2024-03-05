@@ -2,6 +2,7 @@ package route
 
 import (
 	"ticketsale/controller"
+	"ticketsale/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +10,7 @@ import (
 func Route(route *gin.Engine) {
 	route.POST("/login", controller.Login)
 	route.POST("/register", controller.Register)
-	api := route.Use()
+	api := route.Use(middleware.JWTAuth)
 	// ticket
 	api.POST("/ticket/create", controller.CreateTicket)
 	api.POST("/ticket/update/:id", controller.UpdateTicket)
