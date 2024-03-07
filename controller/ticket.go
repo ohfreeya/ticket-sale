@@ -159,10 +159,10 @@ func CreateTicketType(ctx *gin.Context) {
 func UpdateTicketType(ctx *gin.Context) {
 	id := ctx.Param("id")
 	type form struct {
-		Name string `json:"name"`
+		Name      string `json:"name"`
 		Introduce string `json:"introduce"`
 	}
-	var req form 
+	var req form
 	var model model.TicketsType
 	_, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
@@ -187,7 +187,7 @@ func UpdateTicketType(ctx *gin.Context) {
 			"msg":   "Update ticket type failed",
 			"error": err.Error(),
 		})
-		return 
+		return
 	}
 }
 
@@ -218,10 +218,10 @@ func DeleteTicketType(ctx *gin.Context) {
 // ticket sale price CURD
 func CreateTicketSalePrice(ctx *gin.Context) {
 	type form struct {
-		TickeketsID int `json:"tickets_id"`
-		TicketsTypeID int `json:"tickets_type_id"`
-		Price float64 `json:"price"`
-		ExpiresAt string `json:"expires_at"`
+		TickeketsID   int     `json:"tickets_id"`
+		TicketsTypeID int     `json:"tickets_type_id"`
+		Price         float64 `json:"price"`
+		ExpiresAt     string  `json:"expires_at"`
 	}
 	var req form
 	var m model.TicketsSalePrice
@@ -282,10 +282,10 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 func UpdateTicketSalePrice(ctx *gin.Context) {
 	id := ctx.Param("id")
 	type form struct {
-		TickeketsID int `json:"tickets_id"`
-		TicketsTypeID int `json:"tickets_type_id"`
-		Price float64 `json:"price"`
-		ExpiresAt string `json:"expires_at"`
+		TickeketsID   int     `json:"tickets_id"`
+		TicketsTypeID int     `json:"tickets_type_id"`
+		Price         float64 `json:"price"`
+		ExpiresAt     string  `json:"expires_at"`
 	}
 	var req form
 	var m model.TicketsSalePrice
