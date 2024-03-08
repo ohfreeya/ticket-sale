@@ -83,7 +83,7 @@ func (t *TicketsType) Update() error {
 }
 
 func (t *TicketsType) Delete() error {
-	err := config.DB.Delete(t)
+	err := config.DB.Delete(&t)
 	return err.Error
 }
 
@@ -109,6 +109,6 @@ func (t *TicketsSalePrice) Update() error {
 }
 
 func (t *TicketsSalePrice) Delete() error {
-	err := config.DB.Delete(t)
+	err := config.DB.Delete(&t)
 	return err.Error
 }
