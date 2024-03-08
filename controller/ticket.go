@@ -106,7 +106,7 @@ func UpdateTicket(ctx *gin.Context) {
 func DeleteTicket(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var model model.Tickets
-	_, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Ticket not found",
@@ -114,7 +114,7 @@ func DeleteTicket(ctx *gin.Context) {
 		})
 		return
 	}
-	err = model.Delete()
+	err = target.Delete()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"msg":   "Delete ticket failed",

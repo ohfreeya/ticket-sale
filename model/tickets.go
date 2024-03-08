@@ -29,7 +29,7 @@ type TicketsSalePrice struct {
 	TicketsTypeID int
 	Price         float64
 	ExpiresAt     time.Time
-	Tickets       Tickets `gorm:"foreignKey:TicketsID"`
+	Tickets       Tickets     `gorm:"foreignKey:TicketsID"`
 	TicketsType   TicketsType `gorm:"foreignKey:TicketsTypeID"`
 }
 
@@ -56,7 +56,7 @@ func (t *Tickets) Update() error {
 }
 
 func (t *Tickets) Delete() error {
-	err := config.DB.Delete(t)
+	err := config.DB.Delete(&t)
 	return err.Error
 }
 
@@ -112,4 +112,3 @@ func (t *TicketsSalePrice) Delete() error {
 	err := config.DB.Delete(t)
 	return err.Error
 }
-
