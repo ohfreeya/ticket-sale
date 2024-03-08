@@ -28,6 +28,7 @@ func CreateTicket(ctx *gin.Context) {
 	model.Name = req.Name
 	model.Introduce = req.Introduce
 	model.Count = req.Count
+	model.OwnerID = 1
 	timeLayout := "2006-01-02 15:04:05"
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
@@ -60,7 +61,7 @@ func UpdateTicket(ctx *gin.Context) {
 	}
 	var req form
 	var model model.Tickets
-	_, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Ticket not found",
@@ -76,8 +77,8 @@ func UpdateTicket(ctx *gin.Context) {
 		})
 		return
 	}
-	model.Count = req.Count
-	model.Introduce = req.Introduce
+	target.Count = req.Count
+	target.Introduce = req.Introduce
 	timeLayout := "2006-01-02 15:04:05"
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
@@ -87,8 +88,8 @@ func UpdateTicket(ctx *gin.Context) {
 		})
 		return
 	}
-	model.ExpiresAt = expireAt
-	err = model.Update()
+	target.ExpiresAt = expireAt
+	err = target.Update()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"msg":   "Update ticket failed",
@@ -164,7 +165,7 @@ func UpdateTicketType(ctx *gin.Context) {
 	}
 	var req form
 	var model model.TicketsType
-	_, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Ticket type not found",
@@ -179,9 +180,9 @@ func UpdateTicketType(ctx *gin.Context) {
 		})
 		return
 	}
-	model.Name = req.Name
-	model.Introduce = req.Introduce
-	err = model.Update()
+	target.Name = req.Name
+	target.Introduce = req.Introduce
+	err = target.Update()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Update ticket type failed",
@@ -194,7 +195,7 @@ func UpdateTicketType(ctx *gin.Context) {
 func DeleteTicketType(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var model model.TicketsType
-	_, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Ticket type not found",
@@ -202,7 +203,7 @@ func DeleteTicketType(ctx *gin.Context) {
 		})
 		return
 	}
-	err = model.Delete()
+	err = target.Delete()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"msg":   "Delete ticket type failed",
@@ -290,7 +291,7 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 	var req form
 	var m model.TicketsSalePrice
 
-	_, err := m.Find(map[string]interface{}{"id": id})
+	target, err := m.Find(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Ticket sale price not found",
@@ -305,9 +306,9 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 		})
 		return
 	}
-	m.TicketsID = req.TickeketsID
-	m.TicketsTypeID = req.TicketsTypeID
-	m.Price = req.Price
+	target.TicketsID = req.TickeketsID
+	target.TicketsTypeID = req.TicketsTypeID
+	target.Price = req.Price
 	timeLayout := "2006-01-02 15:04:05"
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
@@ -317,7 +318,7 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 		})
 		return
 	}
-	m.ExpiresAt = expireAt
+	target.ExpiresAt = expireAt
 	err = m.Update()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -334,7 +335,7 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 func DeleteTicketSalePrice(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var model model.TicketsSalePrice
-	_, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"msg":   "Ticket sale price not found",
@@ -342,7 +343,7 @@ func DeleteTicketSalePrice(ctx *gin.Context) {
 		})
 		return
 	}
-	err = model.Delete()
+	err = target.Delete()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"msg":   "Delete ticket sale price failed",

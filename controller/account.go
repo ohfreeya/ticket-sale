@@ -59,11 +59,10 @@ func Login(ctx *gin.Context) {
 	// store the token in cookie
 	ctx.SetCookie("Auth-"+user.Account, tokenStr, 3600, "/", "localhost", false, true)
 
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"msg":   "Login success",
-		"token": tokenStr,
-		"uid":  user.ID,
+		"token": "Bearer " + tokenStr,
+		"uid":   user.ID,
 	})
 
 }
