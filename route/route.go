@@ -23,4 +23,8 @@ func Route(route *gin.Engine) {
 	api.POST("/ticket_sale_price/create", controller.CreateTicketSalePrice)
 	api.POST("/ticket_sale_price/update/:id", controller.UpdateTicketSalePrice)
 	api.DELETE("/ticket_sale_price/delete/:id", controller.DeleteTicketSalePrice)
+	// order
+	api.POST("/order/create", controller.CreateOrder)
+	api.POST("/order/update/:id", controller.UpdateOrder)
+	api.DELETE("/order/delete/:id", controller.DeleteOrder)
 }
