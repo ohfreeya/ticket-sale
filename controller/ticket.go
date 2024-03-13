@@ -19,7 +19,8 @@ func CreateTicket(ctx *gin.Context) {
 	var req form
 	var model model.Tickets
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid form",
 			"error": err.Error(),
 		})
@@ -32,7 +33,8 @@ func CreateTicket(ctx *gin.Context) {
 	timeLayout := "2006-01-02 15:04:05"
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid time format",
 			"error": err.Error(),
 		})
@@ -41,14 +43,16 @@ func CreateTicket(ctx *gin.Context) {
 	model.ExpiresAt = expireAt
 	err = model.Create()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Create ticket failed",
 			"error": err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "Create ticket success",
+		"code": 200,
+		"msg":  "Create ticket success",
 	})
 }
 
@@ -63,7 +67,8 @@ func UpdateTicket(ctx *gin.Context) {
 	var model model.Tickets
 	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket not found",
 			"error": err.Error(),
 		})
@@ -71,7 +76,8 @@ func UpdateTicket(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid form",
 			"error": err.Error(),
 		})
@@ -82,7 +88,8 @@ func UpdateTicket(ctx *gin.Context) {
 	timeLayout := "2006-01-02 15:04:05"
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid time format",
 			"error": err.Error(),
 		})
@@ -91,7 +98,8 @@ func UpdateTicket(ctx *gin.Context) {
 	target.ExpiresAt = expireAt
 	err = target.Update()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Update ticket failed",
 			"error": err.Error(),
 		})
@@ -108,7 +116,8 @@ func DeleteTicket(ctx *gin.Context) {
 	var model model.Tickets
 	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket not found",
 			"error": err.Error(),
 		})
@@ -116,14 +125,16 @@ func DeleteTicket(ctx *gin.Context) {
 	}
 	err = target.Delete()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Delete ticket failed",
 			"error": err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "Delete ticket success",
+		"code": 200,
+		"msg":  "Delete ticket success",
 	})
 }
 
@@ -136,7 +147,8 @@ func CreateTicketType(ctx *gin.Context) {
 	var req form
 	var model model.TicketsType
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid form",
 			"error": err.Error(),
 		})
@@ -146,14 +158,16 @@ func CreateTicketType(ctx *gin.Context) {
 	model.Introduce = req.Introduce
 	err := model.Create()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Create ticket type failed",
 			"error": err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "Create ticket type success",
+		"code": 200,
+		"msg":  "Create ticket type success",
 	})
 }
 
@@ -167,14 +181,16 @@ func UpdateTicketType(ctx *gin.Context) {
 	var model model.TicketsType
 	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket type not found",
 			"error": err.Error(),
 		})
 		return
 	}
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid form",
 			"error": err.Error(),
 		})
@@ -184,7 +200,8 @@ func UpdateTicketType(ctx *gin.Context) {
 	target.Introduce = req.Introduce
 	err = target.Update()
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Update ticket type failed",
 			"error": err.Error(),
 		})
@@ -197,7 +214,8 @@ func DeleteTicketType(ctx *gin.Context) {
 	var model model.TicketsType
 	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket type not found",
 			"error": err.Error(),
 		})
@@ -205,14 +223,16 @@ func DeleteTicketType(ctx *gin.Context) {
 	}
 	err = target.Delete()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Delete ticket type failed",
 			"error": err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "Delete ticket type success",
+		"code": 200,
+		"msg":  "Delete ticket type success",
 	})
 }
 
@@ -230,7 +250,8 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 	var ticketTypeModel model.TicketsType
 	// bind the form to the struct
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid form",
 			"error": err.Error(),
 		})
@@ -239,7 +260,8 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 	// check the ticket and ticket type exists
 	_, err := ticketModel.Find(map[string]interface{}{"id": req.TickeketsID})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket not found",
 			"error": err.Error(),
 		})
@@ -247,7 +269,8 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 	}
 	_, err = ticketTypeModel.Find(map[string]interface{}{"id": req.TicketsTypeID})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket type not found",
 			"error": err.Error(),
 		})
@@ -260,7 +283,8 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 	timeLayout := "2006-01-02 15:04:05"
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid time format",
 			"error": err.Error(),
 		})
@@ -269,14 +293,16 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 	m.ExpiresAt = expireAt
 	err = m.Create()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Create ticket sale price failed",
 			"error": err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "Create ticket sale price success",
+		"code": 200,
+		"msg":  "Create ticket sale price success",
 	})
 }
 
@@ -293,14 +319,16 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 
 	target, err := m.Find(map[string]interface{}{"id": id})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket sale price not found",
 			"error": err.Error(),
 		})
 		return
 	}
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid form",
 			"error": err.Error(),
 		})
@@ -312,7 +340,8 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 	timeLayout := "2006-01-02 15:04:05"
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid time format",
 			"error": err.Error(),
 		})
@@ -321,14 +350,16 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 	target.ExpiresAt = expireAt
 	err = m.Update()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Update ticket sale price failed",
 			"error": err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "Update ticket sale price success",
+		"code": 200,
+		"msg":  "Update ticket sale price success",
 	})
 }
 
@@ -337,7 +368,8 @@ func DeleteTicketSalePrice(ctx *gin.Context) {
 	var model model.TicketsSalePrice
 	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Ticket sale price not found",
 			"error": err.Error(),
 		})
@@ -345,13 +377,15 @@ func DeleteTicketSalePrice(ctx *gin.Context) {
 	}
 	err = target.Delete()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Delete ticket sale price failed",
 			"error": err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "Delete ticket sale price success",
+		"code": 200,
+		"msg":  "Delete ticket sale price success",
 	})
 }

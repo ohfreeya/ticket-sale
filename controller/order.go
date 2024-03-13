@@ -18,7 +18,11 @@ func CreateOrder(ctx *gin.Context) {
 	}
 	var model model.Orders
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Invalid form",
+			"error": err.Error(),
+		})
 		return
 	}
 	model.UserID = req.UserID
@@ -28,11 +32,16 @@ func CreateOrder(ctx *gin.Context) {
 	model.Total = req.Total
 	model.Coupon = req.Coupon
 	if err := model.Create(); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Failed to create order",
+			"error": err.Error(),
+		})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
+		"code":    200,
 		"message": "success",
 	})
 }
@@ -49,12 +58,20 @@ func UpdateOrder(ctx *gin.Context) {
 	}
 	var model model.Orders
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Invalid form",
+			"error": err.Error(),
+		})
 		return
 	}
 	target, err := model.Find(map[string]interface{}{"id": id})
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Order not found",
+			"error": err.Error(),
+		})
 		return
 	}
 	target.UserID = req.UserID
@@ -64,11 +81,16 @@ func UpdateOrder(ctx *gin.Context) {
 	target.Total = req.Total
 	target.Coupon = req.Coupon
 	if err := target.Update(); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Failed to update order",
+			"error": err.Error(),
+		})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
+		"code":    200,
 		"message": "success",
 	})
 
@@ -80,12 +102,20 @@ func DeleteOrder(ctx *gin.Context) {
 	target, err := model.Find(map[string]interface{}{"id": id})
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Order not found",
+			"error": err.Error(),
+		})
 		return
 	}
 
 	if err := target.Delete(); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Failed to delete order",
+			"error": err.Error(),
+		})
 		return
 	}
 

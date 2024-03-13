@@ -18,7 +18,8 @@ func Login(ctx *gin.Context) {
 	var userM model.User
 	// Bind the form to the struct
 	if err := ctx.ShouldBindJSON(&loginForm); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
 			"msg":   "Invalid form",
 			"error": err.Error(),
 		})
@@ -41,15 +42,17 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginForm.Password)); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"msg": "Wrong password",
+		ctx.JSON(http.StatusOK, gin.H{
+			"code": 400,
+			"msg":  "Wrong password",
 		})
 		return
 	}
 	// Generate the JWT token
 	tokenStr, err := auth.GenerateToken(user.Account, int(user.ID))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  500,
 			"msg":   "Failed to generate the token",
 			"error": err.Error(),
 		})
@@ -60,6 +63,7 @@ func Login(ctx *gin.Context) {
 	ctx.SetCookie("Auth-"+user.Account, tokenStr, 3600, "/", "localhost", false, true)
 
 	ctx.JSON(http.StatusOK, gin.H{
+		"code":  200,
 		"msg":   "Login success",
 		"token": "Bearer " + tokenStr,
 		"uid":   user.ID,
@@ -80,13 +84,19 @@ func Register(ctx *gin.Context) {
 	var userM model.User
 	// Bind the form to the struct
 	if err := ctx.ShouldBindJSON(&registerForm); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Invalid form", "error": err.Error()})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code": 400,
+			"msg":  "Invalid form",
+		})
 		return
 	}
 	// Check if the email is already registered
 	userM.Email = registerForm.Email
 	if userM.CheckEmailExist() {
-		ctx.JSON(http.StatusBadRequest, gin.H{"msg": "Email already registered"})
+		ctx.JSON(http.StatusOK, gin.H{
+			"code": 400,
+			"msg":  "Email already registered",
+		})
 		return
 	}
 
@@ -101,7 +111,8 @@ func Register(ctx *gin.Context) {
 	// Hash the password
 	hash, err := bcrypt.GenerateFromPassword([]byte(registerForm.Password), bcrypt.DefaultCost)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  500,
 			"msg":   "Failed to hash the password",
 			"error": err.Error(),
 		})
@@ -111,7 +122,8 @@ func Register(ctx *gin.Context) {
 	// Create the user
 	result := userM.Create()
 	if result != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  500,
 			"msg":   "Failed to create the user",
 			"error": err.Error(),
 		})
@@ -119,7 +131,8 @@ func Register(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg": "User created",
+		"code": 200,
+		"msg":  "User created",
 	})
 
 }
