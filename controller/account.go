@@ -36,8 +36,9 @@ func Login(ctx *gin.Context) {
 	}
 	user, err := userM.Find(checkCond)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"msg": "User not found",
+		ctx.JSON(http.StatusOK, gin.H{
+			"code": 400,
+			"msg":  "User not found",
 		})
 		return
 	}
