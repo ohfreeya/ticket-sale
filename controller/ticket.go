@@ -14,6 +14,7 @@ func CreateTicket(ctx *gin.Context) {
 		Name      string `json:"name"`
 		Introduce string `json:"introduce"`
 		Count     int    `json:"count"`
+		StartAt   string `json:"start_at"`
 		ExpiresAt string `json:"expires_at"`
 	}
 	var req form
@@ -31,6 +32,15 @@ func CreateTicket(ctx *gin.Context) {
 	model.Count = req.Count
 	model.OwnerID = 1
 	timeLayout := "2006-01-02 15:04:05"
+	startAt, err := time.Parse(timeLayout, req.StartAt)
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Invalid time format",
+			"error": err.Error(),
+		})
+		return
+	}
 	expireAt, err := time.Parse(timeLayout, req.ExpiresAt)
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
@@ -40,6 +50,7 @@ func CreateTicket(ctx *gin.Context) {
 		})
 		return
 	}
+	model.StartAt = startAt
 	model.ExpiresAt = expireAt
 	err = model.Create()
 	if err != nil {

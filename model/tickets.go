@@ -13,6 +13,7 @@ type Tickets struct {
 	Name      string `gorm:"unique"`
 	Count     int
 	Introduce string `gorm:"type:text"`
+	StartAt   time.Time
 	ExpiresAt time.Time
 	User      User `gorm:"foreignKey:OwnerID"`
 }
