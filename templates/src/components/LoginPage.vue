@@ -70,7 +70,7 @@ export default {
                 // Redirect to home page if login is successful
                 localStorage.setItem('token', response.data.token)
                 localStorage.setItem('uid', response.data.uid)
-                this.$router.push('/home');
+                this.$router.push('/');
             } else {
                 // Show error message
                 this.showAlert(response.data.msg, 'error', true)

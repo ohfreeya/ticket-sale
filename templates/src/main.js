@@ -13,6 +13,7 @@ import * as directives from 'vuetify/directives'
 import HomePage from './components/HomePage.vue'
 import RegisterPage from './components/RegisterPage.vue'
 import LoginPage from './components/LoginPage.vue'
+import OrderList from './components/OrderList.vue'
 
 const routes = [
     { 
@@ -29,6 +30,11 @@ const routes = [
         path: '/login', 
         component: LoginPage , 
         name: 'login'
+    },
+    {
+        path: '/order/list',
+        component:  OrderList,
+        name: 'orderList'
     }
 ]
 
