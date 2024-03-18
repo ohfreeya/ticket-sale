@@ -8,6 +8,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import DayJsAdapter from '@date-io/dayjs'
 
 
 import HomePage from './components/HomePage.vue'
@@ -45,6 +46,9 @@ const router = createRouter({
 const vuetify = createVuetify({
     components,
     directives,
+    date: {
+        adapter: new DayJsAdapter(),
+    },
 })
 
 createApp(App).use(vuetify).use(router).mount('#app')

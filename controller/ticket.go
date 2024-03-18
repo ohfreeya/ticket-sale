@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"ticketsale/model"
+	"ticketsale/service"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -27,10 +28,11 @@ func CreateTicket(ctx *gin.Context) {
 		})
 		return
 	}
+	uid := service.GetUidFromToken(ctx)
 	model.Name = req.Name
 	model.Introduce = req.Introduce
 	model.Count = req.Count
-	model.OwnerID = 1
+	model.OwnerID = uid
 	timeLayout := "2006-01-02 15:04:05"
 	startAt, err := time.Parse(timeLayout, req.StartAt)
 	if err != nil {
