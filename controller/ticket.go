@@ -9,6 +9,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func TicketList(ctx *gin.Context) {
+	var model model.Tickets
+	ret, err := model.Find(nil)
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  400,
+			"msg":   "Get ticket list failed",
+			"error": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "Get ticket list success",
+		"data": ret,
+	})
+}
+
 // ticket CURD
 func CreateTicket(ctx *gin.Context) {
 	type form struct {
@@ -78,7 +96,7 @@ func UpdateTicket(ctx *gin.Context) {
 	}
 	var req form
 	var model model.Tickets
-	target, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.First(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,
@@ -127,7 +145,7 @@ func UpdateTicket(ctx *gin.Context) {
 func DeleteTicket(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var model model.Tickets
-	target, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.First(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,

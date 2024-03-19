@@ -15,6 +15,7 @@ func Route(route *gin.Engine) {
 	api.Use(middleware.JWTAuth)
 	{
 		// ticket
+		api.POST("/ticket/list", controller.TicketList)
 		api.POST("/ticket/create", controller.CreateTicket)
 		api.POST("/ticket/update/:id", controller.UpdateTicket)
 		api.DELETE("/ticket/delete/:id", controller.DeleteTicket)

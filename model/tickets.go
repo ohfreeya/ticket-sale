@@ -35,8 +35,19 @@ type TicketsSalePrice struct {
 }
 
 // ticket's method
-func (t *Tickets) Find(params map[string]interface{}) (ret Tickets, err error) {
-	result := config.DB.Where(params).First(&ret)
+func (t *Tickets) First(params map[string]interface{}) (ret Tickets, err error) {
+	result := config.DB.Where(params).Preload("User").First(&ret)
+	if result.RowsAffected == 0 {
+		err = result.Error
+	}
+	if result.Error != nil {
+		err = result.Error
+	}
+	return
+}
+
+func (t *Tickets) Find(params map[string]interface{}) (ret []Tickets, err error) {
+	result := config.DB.Where(params).Preload("User").Find(&ret)
 	if result.RowsAffected == 0 {
 		err = result.Error
 	}

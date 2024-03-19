@@ -10,7 +10,7 @@ type User struct {
 	gorm.Model
 	Name     string
 	Account  string
-	Password string
+	Password string `json:"-"`
 	Email    string `gorm:"unique"`
 	Type     int8   `gorm:"default:0"`
 	Phone    string

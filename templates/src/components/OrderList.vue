@@ -142,6 +142,15 @@ export default {
         this.getListData();
     },
     methods: {
+        async showAlert(msg, type, isVisable) {
+            this.alertMsg.msg = msg
+            this.alertMsg.type = type
+            this.alertMsg.isVisable = isVisable
+            this.timeout = setTimeout(() => {
+                this.alertMsg.isVisable = false
+            }, 2000)
+
+        },
         async getListData() {
             axios.post('http://localhost:8080/api/order/list').then((res) => {
                 this.online = res.data.online;
@@ -151,7 +160,6 @@ export default {
             });
         },
         async sendCreateTicketData() {
-            console.log(this.newTicket)
             axios.post('http://localhost:8080/api/ticket/create', {
                 name: this.newTicket.name,
                 count: this.newTicket.count,
@@ -165,13 +173,10 @@ export default {
             }).then((res) => {
                 if (res.data.code === 200) {
                     this.getListData();
-                    this.alertMsg.msg = res.data.msg;
-                    this.alertMsg.type = 'success';
-                    this.alertMsg.isVisable = true;
+                    this.showAlert(res.data.msg, 'success', true)
+                    this.isActive.value = false
                 } else {
-                    this.alertMsg.msg = res.data.msg;
-                    this.alertMsg.type = 'error';
-                    this.alertMsg.isVisable = true;
+                    this.showAlert(res.data.msg, 'error', true)
                 }
 
             }).catch((err) => {
