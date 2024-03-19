@@ -152,12 +152,21 @@ export default {
 
         },
         async getListData() {
-            axios.post('http://localhost:8080/api/order/list').then((res) => {
-                this.online = res.data.online;
-                this.waitOn = res.data.waitOn;
-            }).catch((err) => {
-                console.log(err);
-            });
+            axios.post('http://localhost:8080/api/ticket/list',{},{
+                headers: {
+                    Authorization: localStorage.getItem('token')
+                }
+            }).then((res) => {
+                if (res.data.code === 200) {
+                    this.online = res.data.data.online;
+                    this.waitOn = res.data.data.waitOn;
+                } else if(res.data.code === 401) {
+                    this.showAlert(res.data.msg, 'error', true)
+                    this.$router.push('/login');
+                } else {
+                    this.showAlert(res.data.msg, 'error', true)
+                }
+            })
         },
         async sendCreateTicketData() {
             axios.post('http://localhost:8080/api/ticket/create', {
@@ -175,6 +184,9 @@ export default {
                     this.getListData();
                     this.showAlert(res.data.msg, 'success', true)
                     this.isActive.value = false
+                } else if(res.data.code === 401) {
+                    this.showAlert(res.data.msg, 'error', true)
+                    this.$router.push('/login');
                 } else {
                     this.showAlert(res.data.msg, 'error', true)
                 }
