@@ -65,7 +65,7 @@ func UpdateOrder(ctx *gin.Context) {
 		})
 		return
 	}
-	target, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.First(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,
@@ -99,7 +99,7 @@ func UpdateOrder(ctx *gin.Context) {
 func DeleteOrder(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var model model.Orders
-	target, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.First(map[string]interface{}{"id": id})
 
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{

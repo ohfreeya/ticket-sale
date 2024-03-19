@@ -210,7 +210,7 @@ func UpdateTicketType(ctx *gin.Context) {
 	}
 	var req form
 	var model model.TicketsType
-	target, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.First(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,
@@ -243,7 +243,7 @@ func UpdateTicketType(ctx *gin.Context) {
 func DeleteTicketType(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var model model.TicketsType
-	target, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.First(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,
@@ -289,7 +289,7 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 		return
 	}
 	// check the ticket and ticket type exists
-	_, err := ticketModel.Find(map[string]interface{}{"id": req.TickeketsID})
+	_, err := ticketModel.First(map[string]interface{}{"id": req.TickeketsID})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,
@@ -298,7 +298,7 @@ func CreateTicketSalePrice(ctx *gin.Context) {
 		})
 		return
 	}
-	_, err = ticketTypeModel.Find(map[string]interface{}{"id": req.TicketsTypeID})
+	_, err = ticketTypeModel.First(map[string]interface{}{"id": req.TicketsTypeID})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,
@@ -348,7 +348,7 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 	var req form
 	var m model.TicketsSalePrice
 
-	target, err := m.Find(map[string]interface{}{"id": id})
+	target, err := m.First(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,
@@ -397,7 +397,7 @@ func UpdateTicketSalePrice(ctx *gin.Context) {
 func DeleteTicketSalePrice(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var model model.TicketsSalePrice
-	target, err := model.Find(map[string]interface{}{"id": id})
+	target, err := model.First(map[string]interface{}{"id": id})
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":  400,

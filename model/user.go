@@ -17,7 +17,7 @@ type User struct {
 	Sex      int8 `gorm:"default:0"`
 }
 
-func (user *User) Find(params map[string]interface{}) (ret User, err error){
+func (user *User) First(params map[string]interface{}) (ret User, err error) {
 	result := config.DB.Where(params).First(&ret)
 	if result.RowsAffected == 0 {
 		err = result.Error
@@ -25,7 +25,18 @@ func (user *User) Find(params map[string]interface{}) (ret User, err error){
 	if result.Error != nil {
 		err = result.Error
 	}
-	return 
+	return
+}
+
+func (user *User) Find(params map[string]interface{}) (ret []User, err error) {
+	result := config.DB.Where(params).Find(&ret)
+	if result.RowsAffected == 0 {
+		err = result.Error
+	}
+	if result.Error != nil {
+		err = result.Error
+	}
+	return
 }
 
 func (user *User) Create() error {

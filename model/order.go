@@ -20,8 +20,19 @@ type Orders struct {
 }
 
 // order's method
-func (o *Orders) Find(params map[string]interface{}) (ret Orders, err error) {
-	result := config.DB.Where(params).First(&ret)
+func (o *Orders) First(params map[string]interface{}) (ret Orders, err error) {
+	result := config.DB.Where(params).Preload("User").Preload("Tickets").First(&ret)
+	if result.RowsAffected == 0 {
+		err = result.Error
+	}
+	if result.Error != nil {
+		err = result.Error
+	}
+	return
+}
+
+func (o *Orders) Find(params map[string]interface{}) (ret []Orders, err error) {
+	result := config.DB.Where(params).Preload("User").Preload("Tickets").Find(&ret)
 	if result.RowsAffected == 0 {
 		err = result.Error
 	}

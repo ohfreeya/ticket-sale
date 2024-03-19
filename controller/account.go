@@ -34,7 +34,7 @@ func Login(ctx *gin.Context) {
 	} else {
 		checkCond["account"] = loginForm.Account
 	}
-	user, err := userM.Find(checkCond)
+	user, err := userM.First(checkCond)
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code": 400,
