@@ -21,7 +21,7 @@
             <v-col cols="4">
                 <v-card
                     class="mx-auto"
-                    href="/order/list"
+                    href="/ticket/list"
                     max-width="244"
                     min-height="200"
                     hover

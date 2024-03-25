@@ -14,7 +14,7 @@ import DayJsAdapter from '@date-io/dayjs'
 import HomePage from './components/HomePage.vue'
 import RegisterPage from './components/RegisterPage.vue'
 import LoginPage from './components/LoginPage.vue'
-import OrderList from './components/OrderList.vue'
+import TicketList from './components/TicketList.vue'
 
 const routes = [
     { 
@@ -33,9 +33,9 @@ const routes = [
         name: 'login'
     },
     {
-        path: '/order/list',
-        component:  OrderList,
-        name: 'orderList'
+        path: '/ticket/list',
+        component:  TicketList,
+        name: 'ticketList'
     }
 ]
 

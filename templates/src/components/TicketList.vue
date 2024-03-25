@@ -71,7 +71,7 @@
                         </v-btn>
                         <v-btn
                         text="Create"
-                        @click="sendCreateTicketData"
+                        @click="sendCreateTicketData(isActive)"
                         ></v-btn>
                     </v-card-actions>
                 </v-card>
@@ -168,7 +168,7 @@ export default {
                 }
             })
         },
-        async sendCreateTicketData() {
+        async sendCreateTicketData(isActive) {
             axios.post('http://localhost:8080/api/ticket/create', {
                 name: this.newTicket.name,
                 count: this.newTicket.count,
@@ -181,9 +181,9 @@ export default {
                 }
             }).then((res) => {
                 if (res.data.code === 200) {
+                    isActive.value = false;
                     this.getListData();
                     this.showAlert(res.data.msg, 'success', true)
-                    this.isActive.value = false
                 } else if(res.data.code === 401) {
                     this.showAlert(res.data.msg, 'error', true)
                     this.$router.push('/login');
@@ -191,9 +191,7 @@ export default {
                     this.showAlert(res.data.msg, 'error', true)
                 }
 
-            }).catch((err) => {
-                console.log(err);
-            });
+            })
         }
     }
 }
