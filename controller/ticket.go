@@ -11,6 +11,10 @@ import (
 
 func TicketList(ctx *gin.Context) {
 	var model model.Tickets
+	var response = map[string]interface{}{
+		"inLine":  make([]interface{}, 0),
+		"outLine": make([]interface{}, 0),
+	}
 	ret, err := model.Find(nil)
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
@@ -20,10 +24,25 @@ func TicketList(ctx *gin.Context) {
 		})
 		return
 	}
+	for _, data := range ret {
+		formatData := map[string]interface{}{
+			"id":        data.ID,
+			"name":      data.Name,
+			"introduce": data.Introduce,
+			"count":     data.Count,
+			"start":     data.StartAt.Format("2006-01-02 15:04:05"),
+			"end":       data.ExpiresAt.Format("2006-01-02 15:04:05"),
+		}
+		if data.ExpiresAt.Before(time.Now()) {
+			response["inLine"] = append(response["inLine"].([]interface{}), formatData)
+		} else {
+			response["outLine"] = append(response["outLine"].([]interface{}), formatData)
+		}
+	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"msg":  "Get ticket list success",
-		"data": ret,
+		"data": response,
 	})
 }
 
